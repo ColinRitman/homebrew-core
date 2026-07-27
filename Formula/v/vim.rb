@@ -5,6 +5,7 @@ class Vim < Formula
   url "https://github.com/vim/vim/archive/refs/tags/v9.2.0850.tar.gz"
   sha256 "4971917f5a83c913868e3e8f07a128a9a393a1cc91fe00875b312f16014a28e7"
   license "Vim"
+  revision 1
   compatibility_version 1
   head "https://github.com/vim/vim.git", branch: "master"
 
