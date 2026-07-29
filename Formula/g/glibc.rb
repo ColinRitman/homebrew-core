@@ -104,8 +104,8 @@ class Glibc < Formula
       sha256 "5fd88bb507f91930d04230094a8ac0611519cbc49b19084c0577eb92722862d4"
     end
     on_intel do
-      url "https://github.com/Homebrew/glibc-bootstrap/releases/download/1.1.1/bootstrap-x86_64-gcc-9.5.0.tar.gz"
-      sha256 "f7f0c7293bb60644b2463351a4ba748b0b108ccda49d4a098aa13e331d26b8c3"
+      url "https://github.com/Homebrew/glibc-bootstrap/releases/download/1.2.0/bootstrap-x86_64-gcc-10.5.0.tar.gz"
+      sha256 "a7415ef53dfc2bdf9a548a4805f159e26db1e9bbbf44e6e9eb2cf2a194ebfe49"
     end
   end
 
@@ -237,6 +237,11 @@ class Glibc < Formula
         "--enable-fortify-source",
         "--enable-stack-protector=strong",
       ]
+      # Ubuntu glibc has CET enabled and Ubuntu GCC injects -fcf-protection.
+      # Using permissive as non-default prefix setups that mix relocatable
+      # bottles with source installs could trigger CET error if toolchain
+      # used does not inject -fcf-protection[=full].
+      args << "--enable-cet=permissive" if Hardware::CPU.intel?
 
       cflags = "-O2 #{ENV["HOMEBREW_OPTFLAGS"]}"
       cflags += " -mbranch-protection=standard" if Hardware::CPU.arm64?
@@ -280,7 +285,11 @@ class Glibc < Formula
 
       system "../configure", *args, "CFLAGS=#{cflags}"
       system "make", "all"
-      system "make", "check", *xfail_tests if build.bottle?
+      begin
+        system "make", "check", *xfail_tests if build.bottle?
+      ensure
+        logs.install Dir["elf/check-cet*"]
+      end
       system "make", "install", "localedir=#{share}/locale"
       prefix.install_symlink "lib" => "lib64"
     end
