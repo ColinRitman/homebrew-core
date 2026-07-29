@@ -1,8 +1,8 @@
 class WoodpeckerCli < Formula
   desc "CLI client for the Woodpecker Continuous Integration server"
   homepage "https://woodpecker-ci.org/"
-  url "https://github.com/woodpecker-ci/woodpecker/archive/refs/tags/v3.16.0.tar.gz"
-  sha256 "54b61191cc87c2b8a74bbad05e2f259eb5576bd09a75c794de8b86741ba42b23"
+  url "https://github.com/woodpecker-ci/woodpecker/releases/download/v3.16.0/woodpecker-src.tar.gz"
+  sha256 "ebdc3d2b12ba49aad3adc9fb697aebc164caf5b74531a270826b0e87e0a268f1"
   license "Apache-2.0"
   head "https://github.com/woodpecker-ci/woodpecker.git", branch: "main"
 
